@@ -1,3 +1,4 @@
+package PriorityScheduling;
 import java.util.*;
 
 class Process {
@@ -5,15 +6,15 @@ class Process {
 
     Process(int pno, int at, int bt, int pr) {
         this.pno = pno;
-        this.pr = pr;
         this.at = at;
         this.bt = bt;
+        this.pr = pr;
     }
 }
 
 public class PriorityScheduling {
-    static final int totalprocess = 5;
-    static Process proc[] = new Process[totalprocess];
+    static int totalprocess;
+    static Process[] proc;
 
     static boolean comp(Process a, Process b) {
         if (a.at == b.at) {
@@ -23,8 +24,8 @@ public class PriorityScheduling {
         }
     }
 
-    static void get_wt_time(int wt[]) {
-        int service[] = new int[totalprocess];
+    static void get_wt_time(int[] wt) {
+        int[] service = new int[totalprocess];
         service[0] = proc[0].at;
         wt[0] = 0;
 
@@ -37,22 +38,22 @@ public class PriorityScheduling {
         }
     }
 
-    static void get_tat_time(int tat[], int wt[]) {
+    static void get_tat_time(int[] tat, int[] wt) {
         for (int i = 0; i < totalprocess; i++) {
             tat[i] = proc[i].bt + wt[i];
         }
     }
 
     static void findgc() {
-        int wt[] = new int[totalprocess];
-        int tat[] = new int[totalprocess];
+        int[] wt = new int[totalprocess];
+        int[] tat = new int[totalprocess];
         double wavg = 0, tavg = 0;
 
         get_wt_time(wt);
         get_tat_time(tat, wt);
 
-        int stime[] = new int[totalprocess];
-        int ctime[] = new int[totalprocess];
+        int[] stime = new int[totalprocess];
+        int[] ctime = new int[totalprocess];
 
         stime[0] = proc[0].at;
         ctime[0] = stime[0] + tat[0];
@@ -76,12 +77,22 @@ public class PriorityScheduling {
     }
 
     public static void main(String[] args) {
-        int arrivaltime[] = {1, 2, 3, 4, 5};
-        int bursttime[] = {3, 5, 1, 7, 4};
-        int priority[] = {3, 4, 1, 7, 8};
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of processes: ");
+        totalprocess = scanner.nextInt();
+        proc = new Process[totalprocess];
 
         for (int i = 0; i < totalprocess; i++) {
-            proc[i] = new Process(i + 1, arrivaltime[i], bursttime[i], priority[i]);
+            System.out.println("Enter details for process " + (i + 1) + ": ");
+            System.out.print("Arrival Time: ");
+            int at = scanner.nextInt();
+            System.out.print("Burst Time: ");
+            int bt = scanner.nextInt();
+            System.out.print("Priority: ");
+            int pr = scanner.nextInt();
+
+            proc[i] = new Process(i + 1, at, bt, pr);
         }
 
         Arrays.sort(proc, (a, b) -> {
@@ -93,5 +104,6 @@ public class PriorityScheduling {
         });
 
         findgc();
+        scanner.close();
     }
 }
