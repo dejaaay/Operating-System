@@ -9,77 +9,63 @@ public class RoundRobin {
     }
 }
 
-
-
 class RoundRobinScheduling {
 
     // Method that controls the execution of the program, where the user chooses the scenario
     public void execute() {
         Scanner scanner = new Scanner(System.in);
+        char repeat;
 
-        // Prompt user to choose the scenario (same or different arrival time)
-        System.out.println("Choose a scenario: \n(1) Same arrival time,\n(2) Different arrival time\n ");
-        int userChoice = scanner.nextInt();  // Read user choice
+        do {
+            System.out.println("Choose a scenario: \n(1) Same arrival time,\n(2) Different arrival time\n");
+            int userChoice = scanner.nextInt();
 
-        switch (userChoice) {
+            switch (userChoice) {
+                case 1: {
+                    System.out.println("\nExecuting Round Robin Scheduling: Same Arrival Times\n");
+                    System.out.print("Enter the number of processes: ");
+                    int numProcesses = scanner.nextInt();
+                    int[] burstTimes = new int[numProcesses];
 
+                    for (int i = 0; i < numProcesses; i++) {
+                        System.out.print("Enter Burst Time for Process" + (i + 1) + ": ");
+                        burstTimes[i] = scanner.nextInt();
+                    }
 
-            // Case 1: Same Arrival Times ------------------------------------------------------------------------------------
-            case 1: { 
-                System.out.println("\nExecuting Round Robin Scheduling: Same Arrival Times\n");
-
-                System.out.print("Enter the number of processes: ");
-                int numProcesses = scanner.nextInt();  // Read number of processes
-
-                int[] burstTimes = new int[numProcesses]; // Array to store burst times
-
-                // Input burst times for all processes
-                for (int i = 0; i < numProcesses; i++) {
-                    System.out.print("Enter Burst Time for Process" + (i + 1) + ": ");
-                    burstTimes[i] = scanner.nextInt();  // Read burst time for each process
+                    System.out.print("Enter Time Quantum: ");
+                    int quantumTime = scanner.nextInt();
+                    calculateAverageTime(numProcesses, burstTimes, null, quantumTime);
+                    break;
                 }
+                case 2: {
+                    System.out.println("\nExecuting Round Robin Scheduling: Different Arrival Times\n");
+                    System.out.print("Enter the number of processes: ");
+                    int numProcesses = scanner.nextInt();
+                    int[] burstTimes = new int[numProcesses];
+                    int[] arrivalTimes = new int[numProcesses];
 
-                System.out.print("Enter Time Quantum: ");
-                int quantumTime = scanner.nextInt();  // Read the time quantum
+                    for (int i = 0; i < numProcesses; i++) {
+                        System.out.print("Enter Arrival Time for Process" + (i + 1) + ": ");
+                        arrivalTimes[i] = scanner.nextInt();
+                        System.out.print("Enter Burst Time for Process" + (i + 1) + ": ");
+                        burstTimes[i] = scanner.nextInt();
+                    }
 
-                // Calculate and display results for the same arrival time scenario
-                calculateAverageTime(numProcesses, burstTimes, null, quantumTime);
-                break;
+                    System.out.print("Enter Time Quantum: ");
+                    int quantumTime = scanner.nextInt();
+                    calculateAverageTime(numProcesses, burstTimes, arrivalTimes, quantumTime);
+                    break;
+                }
+                default:
+                    System.out.println("Invalid choice. Please restart the program.");
             }
 
+            System.out.print("\nDo you want to input again? [y/n]: ");
+            repeat = scanner.next().toLowerCase().charAt(0);  // Convert input to lowercase for consistency
+        } while (repeat == 'y');
 
-
-            // Case 2: Different Arrival Times ------------------------------------------------------------------------------------
-            case 2: { 
-                System.out.println("\nExecuting Round Robin Scheduling: Different Arrival Times\n");
-
-                System.out.print("Enter the number of processes: ");
-                int numProcesses = scanner.nextInt();  // Read number of processes
-
-                int[] burstTimes = new int[numProcesses]; // Array to store burst times
-                int[] arrivalTimes = new int[numProcesses]; // Array to store arrival times
-
-                // Input arrival and burst times for each process
-                for (int i = 0; i < numProcesses; i++) {
-                    System.out.print("Enter Arrival Time for Process" + (i + 1) + ": ");
-                    arrivalTimes[i] = scanner.nextInt();  // Read arrival time
-
-                    System.out.print("Enter Burst Time for Process" + (i + 1) + ": ");
-                    burstTimes[i] = scanner.nextInt();  // Read burst time
-                }
-
-                System.out.print("Enter Time Quantum: ");
-                int quantumTime = scanner.nextInt();  // Read the time quantum
-
-                // Calculate and display results for the different arrival time scenario
-                calculateAverageTime(numProcesses, burstTimes, arrivalTimes, quantumTime);
-                break;
-            }
-
-            default:  // Invalid choice
-                System.out.println("Invalid choice. Please restart the program.");
-        }
-        scanner.close();  // Close the scanner after use
+        System.out.println("Program terminated.");
+        scanner.close();
     }
 
 
