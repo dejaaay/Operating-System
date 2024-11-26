@@ -16,14 +16,6 @@ public class PriorityScheduling {
     static int totalprocess;
     static Process[] proc;
 
-    static boolean comp(Process a, Process b) {
-        if (a.at == b.at) {
-            return a.pr < b.pr;
-        } else {
-            return a.at < b.at;
-        }
-    }
-
     static void get_wt_time(int[] wt) {
         int[] service = new int[totalprocess];
         service[0] = proc[0].at;
@@ -78,32 +70,44 @@ public class PriorityScheduling {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            System.out.print("Enter the number of processes: ");
+            totalprocess = scanner.nextInt();
+            proc = new Process[totalprocess];
 
-        System.out.print("Enter the number of processes: ");
-        totalprocess = scanner.nextInt();
-        proc = new Process[totalprocess];
+            for (int i = 0; i < totalprocess; i++) {
+                System.out.println("Enter details for process " + (i + 1) + ": ");
+                System.out.print("Arrival Time: ");
+                int at = scanner.nextInt();
+                System.out.print("Burst Time: ");
+                int bt = scanner.nextInt();
+                System.out.print("Priority: ");
+                int pr = scanner.nextInt();
 
-        for (int i = 0; i < totalprocess; i++) {
-            System.out.println("Enter details for process " + (i + 1) + ": ");
-            System.out.print("Arrival Time: ");
-            int at = scanner.nextInt();
-            System.out.print("Burst Time: ");
-            int bt = scanner.nextInt();
-            System.out.print("Priority: ");
-            int pr = scanner.nextInt();
+                proc[i] = new Process(i + 1, at, bt, pr);
+            }
 
-            proc[i] = new Process(i + 1, at, bt, pr);
+            Arrays.sort(proc, (a, b) -> {
+                if (a.at == b.at) {
+                    return a.pr - b.pr;
+                } else {
+                    return a.at - b.at;
+                }
+            });
+
+            findgc();
+
+            System.out.print("Do you want to continue? (yes/no): ");
+            scanner.nextLine(); // Consume newline
+            String choice = scanner.nextLine();
+
+            if (choice.equalsIgnoreCase("no")) {
+                System.out.println("Exiting the program.");
+                break;
+            }
         }
 
-        Arrays.sort(proc, (a, b) -> {
-            if (a.at == b.at) {
-                return a.pr - b.pr;
-            } else {
-                return a.at - b.at;
-            }
-        });
-
-        findgc();
         scanner.close();
     }
 }
