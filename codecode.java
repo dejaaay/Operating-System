@@ -3,26 +3,32 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+//Perfected code with cancel-close button
 public class codecode {
 
     public static void main(String[] args) {
         // Create the main frame
         JFrame frame = new JFrame("Disk Scheduling Algorithms");
-        frame.setSize(600, 500);
+        frame.setSize(600, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+
+        // Set background color of the frame
+        frame.getContentPane().setBackground(new Color(240, 248, 255)); // Light blue background
 
         // Title and Introduction Panel
         JPanel introPanel = new JPanel(new BorderLayout());
         JLabel titleLabel = new JLabel("Disk Scheduling Algorithms", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Tahoma", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(22, 160, 133)); // Blue text color
 
         JLabel introLabel = new JLabel("<html><div style='text-align: center;'>"
                 + "<h2>Welcome user!</h2>"
                 + "This program allows you to explore three different disk scheduling algorithms: "
-                + "Shortest Seek Time First (SSTF), Round Robin, and Priority Scheduling. "
+                + "Shortest Seek Time First (SSTF), Round Robin, and Priority Scheduling (Non-Preempt). "
                 + "Click on any button below to begin!</div></html>", JLabel.CENTER);
-        introLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        introLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        introLabel.setForeground(new Color(0, 0, 0)); // Black text color
 
         introPanel.add(titleLabel, BorderLayout.NORTH);
         introPanel.add(introLabel, BorderLayout.CENTER);
@@ -30,12 +36,26 @@ public class codecode {
 
         // Button Panel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3, 1, 10, 10)); // 3 rows, 1 column, spacing of 10 pixels
+        buttonPanel.setLayout(new GridLayout(3, 1, 5, 5)); // Adjust spacing for smaller buttons
 
-        JButton sstfButton = new JButton("SSTF");
+        // Create buttons with custom colors
+        JButton sstfButton = new JButton("Shortest Seek Time First (SSTF)");
+        sstfButton.setBackground(new Color(208, 211, 212)); // Tomato red
+        sstfButton.setOpaque(true); // Ensure the background color is visible
+        sstfButton.setBorderPainted(false); // Optional: Hides the border for a cleaner look
+        sstfButton.setForeground(Color.black);
+
         JButton roundRobinButton = new JButton("Round Robin");
-        JButton priorityButton = new JButton("Priority Scheduling");
+        roundRobinButton.setBackground(new Color(208, 211, 212)); // Tomato red
+        roundRobinButton.setOpaque(true); // Ensure the background color is visible
+        roundRobinButton.setBorderPainted(false); // Optional: Hides the border for a cleaner look
+                roundRobinButton.setForeground(Color.black);
 
+        JButton priorityButton = new JButton("Priority Scheduling (Non-Preempt)");
+        priorityButton.setBackground(new Color(208, 211, 212)); // Tomato red
+        priorityButton.setOpaque(true); // Ensure the background color is visible
+        priorityButton.setBorderPainted(false); // Optional: Hides the border for a cleaner look
+                priorityButton.setForeground(Color.black);
         buttonPanel.add(sstfButton);
         buttonPanel.add(roundRobinButton);
         buttonPanel.add(priorityButton);
@@ -53,21 +73,38 @@ public class codecode {
     // SSTF Implementation
     private static void runSSTF() {
         try {
-            int head = Integer.parseInt(JOptionPane.showInputDialog("Enter the current head position:"));
-            int trackSize = Integer.parseInt(JOptionPane.showInputDialog("Enter the track size:"));
-            int n = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of requests:"));
+            String headInput = JOptionPane.showInputDialog("Enter the current head position:");
+            if (headInput == null) return;
+
+            int head = Integer.parseInt(headInput);
+
+            String trackSizeInput = JOptionPane.showInputDialog("Enter the track size:");
+            if (trackSizeInput == null) return;
+
+            int trackSize = Integer.parseInt(trackSizeInput);
+
+            String nInput = JOptionPane.showInputDialog("Enter the number of requests:");
+            if (nInput == null) return;
+
+            int n = Integer.parseInt(nInput);
             n = Math.min(n, 10); // Limit the number of requests to 10
 
             int[] request = new int[n];
             for (int i = 0; i < n; i++) {
-                request[i] = Integer.parseInt(JOptionPane.showInputDialog("Enter request " + (i + 1) + ":"));
+                String requestInput = JOptionPane.showInputDialog("Enter request " + (i + 1) + ":");
+                if (requestInput == null) return;
+
+                request[i] = Integer.parseInt(requestInput);
                 if (request[i] >= trackSize) {
                     JOptionPane.showMessageDialog(null, "Invalid request! Cannot exceed track size.");
                     i--; // Retry input for invalid request
                 }
             }
 
-            int seekRate = Integer.parseInt(JOptionPane.showInputDialog("Enter the seek rate (ms per seek):"));
+            String seekRateInput = JOptionPane.showInputDialog("Enter the seek rate (ms per seek):");
+            if (seekRateInput == null) return;
+
+            int seekRate = Integer.parseInt(seekRateInput);
             shortestSeekTimeFirst(request, head, seekRate);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Invalid input! Please enter numeric values.");
@@ -118,16 +155,30 @@ public class codecode {
     // Round Robin Implementation
     private static void runRoundRobin() {
         try {
-            int numProcesses = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of processes:"));
+            String numProcessesInput = JOptionPane.showInputDialog("Enter the number of processes:");
+            if (numProcessesInput == null) return;
+
+            int numProcesses = Integer.parseInt(numProcessesInput);
+
             int[] burstTimes = new int[numProcesses];
             int[] arrivalTimes = new int[numProcesses];
 
             for (int i = 0; i < numProcesses; i++) {
-                arrivalTimes[i] = Integer.parseInt(JOptionPane.showInputDialog("Enter Arrival Time for Process " + (i + 1) + ":"));
-                burstTimes[i] = Integer.parseInt(JOptionPane.showInputDialog("Enter Burst Time for Process " + (i + 1) + ":"));
+                String arrivalTimeInput = JOptionPane.showInputDialog("Enter Arrival Time for Process " + (i + 1) + ":");
+                if (arrivalTimeInput == null) return;
+
+                arrivalTimes[i] = Integer.parseInt(arrivalTimeInput);
+
+                String burstTimeInput = JOptionPane.showInputDialog("Enter Burst Time for Process " + (i + 1) + ":");
+                if (burstTimeInput == null) return;
+
+                burstTimes[i] = Integer.parseInt(burstTimeInput);
             }
 
-            int quantum = Integer.parseInt(JOptionPane.showInputDialog("Enter Time Quantum:"));
+            String quantumInput = JOptionPane.showInputDialog("Enter Time Quantum:");
+            if (quantumInput == null) return;
+
+            int quantum = Integer.parseInt(quantumInput);
             calculateRoundRobin(numProcesses, burstTimes, arrivalTimes, quantum);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Invalid input! Please enter numeric values.");
@@ -144,12 +195,28 @@ public class codecode {
     // Priority Scheduling Implementation
     private static void runPriorityScheduling() {
         try {
-            int numProcesses = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of processes:"));
+            String numProcessesInput = JOptionPane.showInputDialog("Enter the number of processes:");
+            if (numProcessesInput == null) return;
+
+            int numProcesses = Integer.parseInt(numProcessesInput);
             Process[] processes = new Process[numProcesses];
+
             for (int i = 0; i < numProcesses; i++) {
-                int at = Integer.parseInt(JOptionPane.showInputDialog("Enter Arrival Time for Process " + (i + 1) + ":"));
-                int bt = Integer.parseInt(JOptionPane.showInputDialog("Enter Burst Time for Process " + (i + 1) + ":"));
-                int pr = Integer.parseInt(JOptionPane.showInputDialog("Enter Priority for Process " + (i + 1) + ":"));
+                String arrivalTimeInput = JOptionPane.showInputDialog("Enter Arrival Time for Process " + (i + 1) + ":");
+                if (arrivalTimeInput == null) return;
+
+                int at = Integer.parseInt(arrivalTimeInput);
+
+                String burstTimeInput = JOptionPane.showInputDialog("Enter Burst Time for Process " + (i + 1) + ":");
+                if (burstTimeInput == null) return;
+
+                int bt = Integer.parseInt(burstTimeInput);
+
+                String priorityInput = JOptionPane.showInputDialog("Enter Priority for Process " + (i + 1) + ":");
+                if (priorityInput == null) return;
+
+                int pr = Integer.parseInt(priorityInput);
+
                 processes[i] = new Process(i + 1, at, bt, pr);
             }
 
